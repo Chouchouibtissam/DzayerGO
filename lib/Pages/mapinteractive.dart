@@ -63,10 +63,10 @@ class _MapInteractive extends State<MapInteractive>{
     canvas.drawRRect(
         RRect.fromRectAndCorners(
           Rect.fromLTWH(
-              0.0,
-              0.0,
-              size.width,
-              size.height,
+            0.0,
+            0.0,
+            size.width,
+            size.height,
           ),
           topLeft: radius,
           topRight: radius,
@@ -122,23 +122,23 @@ class _MapInteractive extends State<MapInteractive>{
 
   _addMarkers() async {
     Marker marker1 =
-        Marker(
-          markerId: const MarkerId('1'),
-          position: const LatLng(36.737232, 3.086472),
-          icon: await getMarkerIcon('assets/Notre_Dame_Afrique.jpg', Size(250.0, 250.0)),
-            onTap: ()=>Null,
-          );
+    Marker(
+      markerId: const MarkerId('1'),
+      position: const LatLng(36.737232, 3.086472),
+      icon: await getMarkerIcon('assets/Notre_Dame_Afrique.jpg', Size(250.0, 250.0)),
+      onTap: ()=>Null,
+    );
     Marker marker2 =Marker(
-          markerId: const MarkerId('2'),
-          position: const LatLng(35.6976541, -0.6337376),
-          icon: await getMarkerIcon('assets/NotreDame.png', Size(250.0, 250.0))
-      );
+        markerId: const MarkerId('2'),
+        position: const LatLng(35.6976541, -0.6337376),
+        icon: await getMarkerIcon('assets/NotreDame.png', Size(250.0, 250.0))
+    );
 
     setState(() {
       _markers.add(marker1);
       _markers.add(marker2);
     });
- }
+  }
 
   late GoogleMapController mapController;
   bool iconFilterPressed = false;
@@ -149,89 +149,89 @@ class _MapInteractive extends State<MapInteractive>{
         width: MediaQuery.of(context).size.width * 1,
         height: MediaQuery.of(context).size.height * 1,
         child: Stack(
-          children:<Widget>[
-            Scaffold(
-              body: Column(
-              children: [
-                Container(
-                  height: MediaQuery.of(context).size.height,
-                  width: MediaQuery.of(context).size.width,
-                  child: GoogleMap(
-                  initialCameraPosition: CameraPosition(target: LatLng(36.737232, 3.086472), zoom: 15),
-                  onMapCreated: _onMapCreated,
-                  markers: _markers,
-                  ),
-                 ),
-              ]
-            ),
-           ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin: EdgeInsets.only(left: 45, right: 45, top: 70, bottom: 20),
-                  padding: EdgeInsets.only(left: 25, right: 10),
-                  height: 50,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.all(Radius.circular(25)),
-                    color: ui.Color(0xffD3C3D0),
-                    border: Border.all(
-                      color: ui.Color(0xff461A3E)
-                    )
-                  ),
-                  child:
-                   TextField(
-                    decoration: InputDecoration(
-                      hintText: 'Rechercher un lieu à visiter',
-                      hintStyle: TextStyle(
-                        fontFamily: 'Poppins',
-                        fontWeight: FontWeight.w500,
-                        fontSize: 13,
-                      ),
-                      border: InputBorder.none,
-                      suffixIcon: Icon(Icons.search),
-                      suffixIconColor: ui.Color(0xff461A3E),
-                    ),
-                  ),
-
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 20),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color:ui.Color(0xff461A3E),
-                  ),
-                  //alignment: Alignment.topLeft,
-                  child: IconButton(
-                    onPressed:
-                      _onFilterButtonPressed,
-                    icon: Icon(
-                        Icons.filter_alt_sharp,
-                      color: Colors.white,
-                    ),
-                    
-                  ),
-                ),
-                iconFilterPressed ? Container(
-                  height: 100,
-                  child: ListView(
+            children:<Widget>[
+              Scaffold(
+                body: Column(
                     children: [
-                      ListTile(
-                        title: Text(
-                            'Categorie'
+                      Container(
+                        height: MediaQuery.of(context).size.height,
+                        width: MediaQuery.of(context).size.width,
+                        child: GoogleMap(
+                          initialCameraPosition: CameraPosition(target: LatLng(36.737232, 3.086472), zoom: 15),
+                          onMapCreated: _onMapCreated,
+                          markers: _markers,
                         ),
                       ),
-                      ListTile(
-                        title: Text(
-                            'Theme'
+                    ]
+                ),
+              ),
+              Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Container(
+                    margin: EdgeInsets.only(left: 45, right: 45, top: 70, bottom: 20),
+                    padding: EdgeInsets.only(left: 25, right: 10),
+                    height: 50,
+                    decoration: BoxDecoration(
+                        borderRadius: BorderRadius.all(Radius.circular(25)),
+                        color: ui.Color(0xffD3C3D0),
+                        border: Border.all(
+                            color: ui.Color(0xff461A3E)
+                        )
+                    ),
+                    child:
+                    TextField(
+                      decoration: InputDecoration(
+                        hintText: 'Rechercher un lieu à visiter',
+                        hintStyle: TextStyle(
+                          fontFamily: 'Poppins',
+                          fontWeight: FontWeight.w500,
+                          fontSize: 13,
                         ),
-                      )
-                    ],
+                        border: InputBorder.none,
+                        suffixIcon: Icon(Icons.search),
+                        suffixIconColor: ui.Color(0xff461A3E),
+                      ),
+                    ),
+
                   ),
-                ):Container(),
-              ],
-            ),
-          ]
+                  Container(
+                    margin: EdgeInsets.only(left: 20),
+                    decoration: BoxDecoration(
+                      shape: BoxShape.circle,
+                      color:ui.Color(0xff461A3E),
+                    ),
+                    //alignment: Alignment.topLeft,
+                    child: IconButton(
+                      onPressed:
+                      _onFilterButtonPressed,
+                      icon: Icon(
+                        Icons.filter_alt_sharp,
+                        color: Colors.white,
+                      ),
+
+                    ),
+                  ),
+                  iconFilterPressed ? Container(
+                    height: 100,
+                    child: ListView(
+                      children: [
+                        ListTile(
+                          title: Text(
+                              'Categorie'
+                          ),
+                        ),
+                        ListTile(
+                          title: Text(
+                              'Theme'
+                          ),
+                        )
+                      ],
+                    ),
+                  ):Container(),
+                ],
+              ),
+            ]
         ),
       ),
     );
@@ -246,5 +246,3 @@ class _MapInteractive extends State<MapInteractive>{
 
   }
 }
-
-

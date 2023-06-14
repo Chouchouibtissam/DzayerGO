@@ -1,4 +1,6 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dzayergo/Models/user.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dzayergo/pages/Home.dart';
@@ -9,13 +11,31 @@ import 'package:dzayergo/pages/visiteVirtuelle.dart';
 
 
 class MainScreen extends StatefulWidget {
-  const MainScreen({super.key});
+
+  const MainScreen({super.key,required this.user});
+  final User user;
 
   @override
   State<MainScreen> createState() => _MainScreen();
 }
 
 class _MainScreen extends State<MainScreen>{
+
+  User? user = FirebaseAuth.instance.currentUser;
+  UserModel connectedUser = UserModel();
+
+  Future<void> getUserData() async{
+    FirebaseFirestore.instance.collection("users").doc(user?.uid).get().then((_)=> print('Success'));
+    DocumentSnapshot documentSnapshot = await FirebaseFirestore.instance.collection("users").doc(user?.uid).get();
+    connectedUser = UserModel.fromMap(documentSnapshot);
+  }
+  @override
+  void initState(){
+    super.initState();
+    setState(() {
+      getUserData();
+    });
+  }
   GlobalKey _NavKey = GlobalKey();
   List PagesAll=[] ;
 
