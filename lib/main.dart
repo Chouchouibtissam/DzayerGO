@@ -1,12 +1,10 @@
 import 'package:dzayergo/main_screen.dart';
 import 'package:flutter/material.dart';
-import 'pages/Home.dart';
 import 'dart:io';
 import 'package:dzayergo/Pages/StartPage.dart';
-import 'package:dzayergo/main_screen.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/material.dart';
+import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 
 class MyHttpOverrides extends HttpOverrides{
@@ -33,11 +31,26 @@ class MyApp extends StatefulWidget {
 }
 
 
+/*Future<void> signOut() async {
+  await FirebaseAuth.instance.signOut(); // on supprime l'utilisateur
+  // on remplace MainScreen par :
+  //    Column(
+  //         children: [
+  //           MainScreen(user: user!),
+  //             const ElevatedButton(
+  //              onPressed: signOut, // Call the signOut method when the button is pressed
+  //              child: Text('Sign Out'),
+  //           ),
+  //         ],
+  //       )
+}*/
+
 class _MyAppState extends State<MyApp>{
   // This widget is the root of your application.
   User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
+    print(user);
     return GetMaterialApp(
       title: 'DzayerGO',
       debugShowCheckedModeBanner: false,
@@ -45,7 +58,9 @@ class _MyAppState extends State<MyApp>{
         scaffoldBackgroundColor: Color(0xffF9FEFF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: user != null? MainScreen(user: user!): StartPage(),
+
+      home: user != null? MainScreen(user: user!):StartPage(),
+      //home : StratPage(),
     );
   }
 }

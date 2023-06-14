@@ -28,11 +28,11 @@ Widget buildEmail(BuildContext context, TextEditingController _emailController) 
         keyboardType: TextInputType.emailAddress,
         validator: (value) {
           if (value!.isEmpty) {
-            return "Please Enter Your Email";
+            return "Veuillez saisir votre adresse e-mail";
           }
           // reg expression for email validation
           if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
-            return "Please Enter a valid email";
+            return "Veuillez entrer une adresse e-mail valide.";
           }
           return null;
         },
@@ -57,7 +57,7 @@ Widget buildEmail(BuildContext context, TextEditingController _emailController) 
             color: Color(0xffc93a41),
           ),
           hintText: 'E-mail',
-          hintStyle: GoogleFonts.montserrat(
+          hintStyle: GoogleFonts.poppins(
             color: Color(0x99461a3e),
           ),
         ),
@@ -170,15 +170,18 @@ Widget buildLoginBtn(context,Future loginEmailPassword,GlobalKey<FormState> key)
   );
 }
 
-Widget buildSignUp(context) {
+Widget buildSignUp(BuildContext context) {
   Size size = MediaQuery.of(context).size;
 
   return Container(
     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
     width: 250,
     child: ElevatedButton(
-      onPressed: () => {
-        const Signup()
+      onPressed: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(builder: (context) => Signup()),
+        );
       },
       style: ElevatedButton.styleFrom(
         primary: Color(0xffC93A41), // Change the button color here
@@ -189,7 +192,7 @@ Widget buildSignUp(context) {
       child: Text(
         'S\'inscrire',
         textAlign: TextAlign.center,
-        style: GoogleFonts.montserrat(
+        style: GoogleFonts.poppins(
           color: Colors.white,
           fontSize: 17,
           fontWeight: FontWeight.bold,
@@ -198,6 +201,7 @@ Widget buildSignUp(context) {
     ),
   );
 }
+
 
 Widget insertLogo(context){
   Size size = MediaQuery.of(context).size;
@@ -250,8 +254,6 @@ Widget _buildSignInWithText(context) {
       )
   );
 }
-
-
 
 
 class _LoginState extends State<Login> {

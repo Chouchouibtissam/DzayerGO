@@ -38,7 +38,6 @@ class _MainScreen extends State<MainScreen>{
   }
   GlobalKey _NavKey = GlobalKey();
   List PagesAll=[] ;
-
   var myindex =0;
   @override
   Widget build(BuildContext context) {
