@@ -16,17 +16,17 @@ class MyButton extends StatelessWidget {
       onTap:onTap,
       child: Container(
         alignment: Alignment.center,
-        padding: EdgeInsets.symmetric(vertical: 5,horizontal: 20),
+        padding: const EdgeInsets.symmetric(vertical: 5,horizontal: 20),
         width: width,
         height: height,
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(26.4),
-          color: hasBeenPressed ? Color(0xffffffff): Color(0xffff5243),
+          color: hasBeenPressed ? const Color(0xffffffff): const Color(0xffff5243),
         ),
         child: Text(
           label,
           style: GoogleFonts.montserrat(
-            color: hasBeenPressed ?Color(0xffff5243): Color(0xffffffff) ,
+            color: hasBeenPressed ?const Color(0xffff5243): const Color(0xffffffff) ,
             fontSize: size,
             fontWeight: FontWeight.bold,
           ),

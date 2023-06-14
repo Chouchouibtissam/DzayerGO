@@ -1,24 +1,37 @@
 import 'package:dzayergo/Pages/StartPage.dart';
+import 'package:dzayergo/main_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
+import 'package:get/get_navigation/src/root/get_material_app.dart';
 
-void main() {
-  runApp(const MyApp());
+void main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp();
+  runApp(MyApp());
 }
 
-class MyApp extends StatelessWidget {
-  const MyApp({super.key});
+class MyApp extends StatefulWidget {
+  const MyApp({Key? key}) : super(key: key);
+  @override
+  State<MyApp> createState() => _MyAppState ();
 
+}
+
+
+class _MyAppState extends State<MyApp>{
   // This widget is the root of your application.
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
-    return MaterialApp(
+    return GetMaterialApp(
       title: 'DzayerGO',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         scaffoldBackgroundColor: Color(0xffF9FEFF),
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
-      home: const StartPage(),
+      home: user != null? MainScreen(user: user!): StartPage(),
     );
   }
 }

@@ -1,0 +1,16 @@
+import 'package:dzayergo/Models/user.dart';
+import 'package:flutter/cupertino.dart';
+
+class Notifications extends StatefulWidget{
+
+  Notifications({Key? key}): super(key:key);
+
+  @override
+  State<Notifications> createState()=> _Notifications();
+}
+class _Notifications extends State<Notifications>{
+  @override
+  Widget build (BuildContext context){
+    return Container();
+  }
+}
