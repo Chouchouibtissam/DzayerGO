@@ -7,8 +7,8 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
 import 'package:dzayergo/Pages/Events.dart';
+import 'package:dzayergo/Pages/Circuit.dart';
 import 'package:provider/provider.dart';
-
 import 'Notifiers/eventNotifier.dart';
 
 class MyHttpOverrides extends HttpOverrides{
@@ -72,8 +72,7 @@ class _MyAppState extends State<MyApp>{
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-      home: Events(),
-      //user != null? MainScreen(user: user!):StartPage(),
+      home: user != null? MainScreen(user: user!):StartPage(),
       //home : StratPage(),
     );
   }
