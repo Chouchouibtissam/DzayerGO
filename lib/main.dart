@@ -6,6 +6,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:get/get.dart';
 import 'package:get/get_navigation/src/root/get_material_app.dart';
+import 'package:dzayergo/Pages/Events.dart';
+import 'package:provider/provider.dart';
+
+import 'Notifiers/eventNotifier.dart';
 
 class MyHttpOverrides extends HttpOverrides{
   @override
@@ -19,7 +23,15 @@ void main() async {
   HttpOverrides.global = MyHttpOverrides();
   WidgetsFlutterBinding.ensureInitialized();
   await Firebase.initializeApp();
-  runApp(MyApp());
+  runApp(MultiProvider(
+    providers: [
+      ChangeNotifierProvider(
+        create: (context) => EventNotifier(),
+      ),
+    ],
+    child: MyApp(),
+  )
+  );
 
 }
 
@@ -48,6 +60,7 @@ class MyApp extends StatefulWidget {
 class _MyAppState extends State<MyApp>{
   // This widget is the root of your application.
   User? user = FirebaseAuth.instance.currentUser;
+
   @override
   Widget build(BuildContext context) {
     print(user);
@@ -59,7 +72,8 @@ class _MyAppState extends State<MyApp>{
         visualDensity: VisualDensity.adaptivePlatformDensity,
       ),
 
-      home: user != null? MainScreen(user: user!):StartPage(),
+      home: Events(),
+      //user != null? MainScreen(user: user!):StartPage(),
       //home : StratPage(),
     );
   }
