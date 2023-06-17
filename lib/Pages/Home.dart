@@ -5,6 +5,8 @@ import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:dzayergo/Models/LieuModel.dart';
 
+import '../Services/Lieu_Service.dart';
+
 class Home extends StatefulWidget {
   const Home ({super.key});
 
@@ -16,6 +18,20 @@ class _HomeState extends State<Home> {
   final MaterialStateProperty<Color?>? iconColor=  MaterialStateProperty.all(Color(0xff461A3E));
   ScrollController _controller =ScrollController();
   Key _key= Key('');
+  List<Lieu> _lieuList = <Lieu>[];
+  LieuService lieuservice = LieuService();
+  List<String> _ratings=['4,2','3,9','4,8','4,5'];
+  @override
+  void initState() {
+    super.initState();
+    initialiseListLieu();
+  }
+   initialiseListLieu () async{
+    _lieuList = await lieuservice.getLieux();
+    print('i am supposed to come first');
+    print(_lieuList.length);
+
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -61,15 +77,6 @@ class _HomeState extends State<Home> {
         elevation: 0,
         toolbarHeight: 150,
         centerTitle: true,
-
-        /*flexibleSpace: Container(
-          decoration: const BoxDecoration(
-            gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.topRight,
-                colors: <Color>[Color(0x45461a3e), Color(0xffff5243)]),
-          ),
-        ),*/
       ),
       body: SingleChildScrollView(
         child: Container(
@@ -214,14 +221,14 @@ class _HomeState extends State<Home> {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   key: _key,
-                  itemCount: Lieux.length,
+                  itemCount: _lieuList.length,
                   controller: _controller,
                   itemBuilder: (BuildContext context, int index) {
                     return SizedBox(
                         height: 250,
                         child: GestureDetector(
                           child: Container(
-                            height:300,
+                            height:250,
                             width: 200,
                             margin: EdgeInsets.only(right: 20, bottom: 15, top: 25, left: 5),
                             padding: EdgeInsets.symmetric(horizontal: 10, vertical: 6),
@@ -240,15 +247,15 @@ class _HomeState extends State<Home> {
                               crossAxisAlignment: CrossAxisAlignment.start,
                               mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                               children: [
-                                Material(
-                                  //elevation:5,
-                                  color: Colors.transparent,
+                                ClipRRect(
+                                  borderRadius: BorderRadius.circular(18),
                                   child: Image(
-                                    image: AssetImage(Lieux[index].Photo),
+                                    image: AssetImage(_lieuList.elementAt(index).Photo),
+                                    fit: BoxFit.fill,
                                   ),
                                 ),
                                 Text(
-                                  Lieux[index].Nom_Lieu!,
+                                  _lieuList.elementAt(index).Nom_Lieu!,
                                   style: TextStyle(
                                       fontFamily: GoogleFonts.poppins().fontFamily,
                                       fontSize: 12,
@@ -260,22 +267,26 @@ class _HomeState extends State<Home> {
                                     Icon(Icons.place_outlined,
                                     color: Color(0xff461A3E)
                                     ),
-                                    Text(
-                                        'El-Oued',
-                                      style: TextStyle(
-                                          fontFamily: GoogleFonts.poppins().fontFamily,
-                                          fontSize: 9,
-                                          fontWeight: FontWeight.w500,
-                                        color: Colors.black
+                                    Container(
+                                      width: 50,
+                                      child: Text(
+                                          _lieuList.elementAt(index).Region!,
+                                        softWrap: true,
+                                        style: TextStyle(
+                                            fontFamily: GoogleFonts.poppins().fontFamily,
+                                            fontSize: 9,
+                                            fontWeight: FontWeight.w500,
+                                          color: Colors.black
+                                        ),
                                       ),
                                     ),
-                                    SizedBox(
-                                      width: 60,
-                                    ),
+                                    SizedBox(width: 60,),
                                     Icon(Icons.star,
                                         color: Colors.black
                                     ),
-                                    Text('4.2')
+                                    Text(
+                                        _ratings.elementAt(index%4)
+                                    )
                                   ],
                                 )
                               ],
@@ -300,7 +311,7 @@ class _HomeState extends State<Home> {
                 child: ListView.builder(
                   scrollDirection: Axis.horizontal,
                   key: _key,
-                  itemCount: Lieux.length,
+                  itemCount: _lieuList.length,
                   controller: _controller,
                   itemBuilder: (BuildContext context, int index) {
                     return SizedBox(
@@ -324,32 +335,69 @@ class _HomeState extends State<Home> {
                             ),
                             child: Row(
                               crossAxisAlignment: CrossAxisAlignment.start,
+                              mainAxisAlignment: MainAxisAlignment.start,
                               children: [
                                 Material(
-                                  //elevation:5,
                                   color: Colors.transparent,
                                   child: Image(
                                     image: AssetImage('assets/Casbah.png'),
-
                                   ),
                                 ),
-                                Text(
-                                  Lieux[index].Nom_Lieu!,
-                                  style: TextStyle(
-                                      fontFamily: GoogleFonts.poppins().fontFamily,
-                                      fontSize: 12,
-                                      fontWeight: FontWeight.w700
-                                  ),
-                                )
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    Container(
+                                      margin: EdgeInsets.only(top: 10),
+                                      width: 100,
+                                      child: Text(
+                                        softWrap: true,
+                                        _lieuList[index].Nom_Lieu!,
+                                        style: TextStyle(
+                                            fontFamily: GoogleFonts.poppins().fontFamily,
+                                            fontSize: 12,
+                                            fontWeight: FontWeight.w700
+                                        ),
+                                      ),
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.place_outlined,
+                                            color: Color(0xff461A3E)
+                                        ),
+                                        Text(
+                                          _lieuList.elementAt(index).Region!,
+                                          softWrap: true,
+                                          style: TextStyle(
+                                              fontFamily: GoogleFonts.poppins().fontFamily,
+                                              fontSize: 9,
+                                              fontWeight: FontWeight.w500,
+                                              color: Colors.black
+                                          ),
+                                        ),
+
+                                      ],
+                                    ),
+                                    Row(
+                                      children: [
+                                        Icon(Icons.star,
+                                            color: Colors.black
+                                        ),
+                                        Text(
+                                            _ratings.elementAt(index%4)
+                                        )
+                                      ],
+                                    )
+                                  ],
+                                ),
                               ],
                             ),
                           ),
                         )
                     );
                   },
-
                 ),
               ),
+              SizedBox(height: 60,)
             ],
           ),
 

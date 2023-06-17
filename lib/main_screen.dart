@@ -1,8 +1,8 @@
 
+import 'package:dzayergo/Pages/rechercheLieux.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:dzayergo/pages/Home.dart';
-import 'package:dzayergo/pages/mapinteractive.dart';
 import 'package:dzayergo/pages/favoris.dart';
 import 'package:dzayergo/pages/notification.dart';
 import 'package:dzayergo/pages/visiteVirtuelle.dart';
@@ -22,7 +22,7 @@ class _MainScreen extends State<MainScreen>{
   var myindex =0;
   @override
   Widget build(BuildContext context) {
-    PagesAll.add(MapInteractive());
+    PagesAll.add(RechercheLieu());
     PagesAll.add(VisiteVirtuelle());
     PagesAll.add(Home());
     PagesAll.add(Favoris());

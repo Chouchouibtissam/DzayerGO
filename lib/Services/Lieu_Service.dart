@@ -1,20 +1,20 @@
 
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:dzayergo/Models/LieuModel.dart';
+
 
 class LieuService{
   FirebaseFirestore firebaseFirestore = FirebaseFirestore.instance;
-  late final db = FirebaseDatabase.instance.ref();
   //Getting data from collection
-  getLieux() async {
-    List<Plant> _plantList = [];
-    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('users').doc(user.uid).collection('Plants').get().then((value) {
+  Future<List<Lieu>> getLieux() async {
+    List<Lieu> _LieuList = [];
+    QuerySnapshot snapshot = await FirebaseFirestore.instance.collection('Lieu').get().then((value) {
       value.docs.forEach((element) {
-        Plant plant = Plant.fromMap(element.data());
-        _plantList.add(plant);
+        Lieu lieu = Lieu.fromMap(element.data());
+        _LieuList.add(lieu);
       });
       return value;
     });
-
-
+    return _LieuList;
   }
 }
