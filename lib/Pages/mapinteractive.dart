@@ -6,14 +6,13 @@ import 'package:dzayergo/Pages/detailLieu.dart';
 import 'package:dzayergo/Pages/rechercheLieux.dart';
 import 'package:dzayergo/Pages/visiteVirtuelle.dart';
 import 'package:dzayergo/main_screen.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/rendering.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
-import 'package:get/get_rx/src/rx_typedefs/rx_typedefs.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
-import 'package:image/image.dart';
 import 'package:path_provider/path_provider.dart';
 
 import '../Models/LieuModel.dart';
@@ -125,7 +124,7 @@ class _MapInteractive extends State<MapInteractive> {
 
     // Convert image to bytes
     final ByteData? byteData =
-        await markerAsImage.toByteData(format: ui.ImageByteFormat.png);
+    await markerAsImage.toByteData(format: ui.ImageByteFormat.png);
     final Uint8List? uint8List = byteData?.buffer.asUint8List();
 
     return BitmapDescriptor.fromBytes(uint8List!);
@@ -156,8 +155,8 @@ class _MapInteractive extends State<MapInteractive> {
   bool iconFilterPressed = false;
   GlobalKey _NavKey = GlobalKey();
   List PagesAll = [];
-
   var myindex = 0;
+  User? user = FirebaseAuth.instance.currentUser;
   @override
   Widget build(BuildContext context) {
     PagesAll.add(RechercheLieu());
@@ -167,217 +166,217 @@ class _MapInteractive extends State<MapInteractive> {
     PagesAll.add(Notifications());
     return Material(
       child:  Container(
-          width: MediaQuery.of(context).size.width * 1,
-          height: MediaQuery.of(context).size.height * 1,
-          child: Stack(children: <Widget>[
-            Scaffold(
-              extendBody: true,
-              bottomNavigationBar: Container(
-                  margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
-                  child: ClipRRect(
+        width: MediaQuery.of(context).size.width * 1,
+        height: MediaQuery.of(context).size.height * 1,
+        child: Stack(children: <Widget>[
+          Scaffold(
+            extendBody: true,
+            bottomNavigationBar: Container(
+                margin: EdgeInsets.only(left: 20, right: 20, bottom: 10),
+                child: ClipRRect(
+                  borderRadius: BorderRadius.all(Radius.circular(25)),
+                  child: BottomNavigationBar(
+                    type: BottomNavigationBarType.fixed,
+                    backgroundColor: ui.Color(0xff461A3E),
+                    showSelectedLabels: false,
+                    showUnselectedLabels: false,
+                    key: _NavKey,
+                    onTap: (index) {
+                      setState(() {
+                        myindex = index;
+                        Get.to(MainScreen(user: user!,));
+                      });
+                    },
+                    items: const [
+                      BottomNavigationBarItem(
+                          icon: ImageIcon(
+                            AssetImage('assets/Vector1.png'),
+                            color: ui.Color(0xffffffff),
+                            size: 30,
+                          ),
+                          label: ''),
+                      BottomNavigationBarItem(
+                          icon: ImageIcon(
+                            AssetImage('assets/Vector2.png'),
+                            color: ui.Color(0xffffffff),
+                            size: 30,
+                          ),
+                          label: ''),
+                      BottomNavigationBarItem(
+                          icon: ImageIcon(
+                            AssetImage('assets/Vector3.png'),
+                            color: ui.Color(0xffffffff),
+                            size: 30,
+                          ),
+                          label: ''),
+                      BottomNavigationBarItem(
+                          icon: ImageIcon(
+                            AssetImage('assets/Vector4.png'),
+                            color: ui.Color(0xffffffff),
+                            size: 30,
+                          ),
+                          label: ''),
+                      BottomNavigationBarItem(
+                          icon: ImageIcon(
+                            AssetImage('assets/Vector5.png'),
+                            color: ui.Color(0xffffffff),
+                            size: 30,
+                          ),
+                          label: ''),
+                    ],
+                  ),
+                )),
+            body: SingleChildScrollView(
+              child: Column(children: [
+                Container(
+                  height: MediaQuery.of(context).size.height,
+                  width: MediaQuery.of(context).size.width,
+                  child: GoogleMap(
+                    initialCameraPosition: CameraPosition(
+                        target: LatLng(36.737232, 3.086472), zoom: 15),
+                    onMapCreated: _onMapCreated,
+                    markers: _markers,
+                  ),
+                ),
+              ]),
+            ),
+          ),
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              Container(
+                margin:
+                EdgeInsets.only(left: 45, right: 45, top: 70, bottom: 20),
+                padding: EdgeInsets.only(left: 25, right: 10),
+                height: 50,
+                decoration: BoxDecoration(
                     borderRadius: BorderRadius.all(Radius.circular(25)),
-                    child: BottomNavigationBar(
-                      type: BottomNavigationBarType.fixed,
-                      backgroundColor: ui.Color(0xff461A3E),
-                      showSelectedLabels: false,
-                      showUnselectedLabels: false,
-                      key: _NavKey,
-                      onTap: (index) {
-                        setState(() {
-                          myindex = index;
-                          Get.to(MainScreen());
-                        });
-                      },
-                      items: const [
-                        BottomNavigationBarItem(
-                            icon: ImageIcon(
-                              AssetImage('assets/Vector1.png'),
-                              color: ui.Color(0xffffffff),
-                              size: 30,
-                            ),
-                            label: ''),
-                        BottomNavigationBarItem(
-                            icon: ImageIcon(
-                              AssetImage('assets/Vector2.png'),
-                              color: ui.Color(0xffffffff),
-                              size: 30,
-                            ),
-                            label: ''),
-                        BottomNavigationBarItem(
-                            icon: ImageIcon(
-                              AssetImage('assets/Vector3.png'),
-                              color: ui.Color(0xffffffff),
-                              size: 30,
-                            ),
-                            label: ''),
-                        BottomNavigationBarItem(
-                            icon: ImageIcon(
-                              AssetImage('assets/Vector4.png'),
-                              color: ui.Color(0xffffffff),
-                              size: 30,
-                            ),
-                            label: ''),
-                        BottomNavigationBarItem(
-                            icon: ImageIcon(
-                              AssetImage('assets/Vector5.png'),
-                              color: ui.Color(0xffffffff),
-                              size: 30,
-                            ),
-                            label: ''),
-                      ],
-                    ),
-                  )),
-              body: SingleChildScrollView(
-                child: Column(children: [
-                  Container(
-                    height: MediaQuery.of(context).size.height,
-                    width: MediaQuery.of(context).size.width,
-                    child: GoogleMap(
-                      initialCameraPosition: CameraPosition(
-                          target: LatLng(36.737232, 3.086472), zoom: 15),
-                      onMapCreated: _onMapCreated,
-                      markers: _markers,
-                    ),
-                  ),
-                ]),
-              ),
-            ),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Container(
-                  margin:
-                      EdgeInsets.only(left: 45, right: 45, top: 70, bottom: 20),
-                  padding: EdgeInsets.only(left: 25, right: 10),
-                  height: 50,
-                  decoration: BoxDecoration(
-                      borderRadius: BorderRadius.all(Radius.circular(25)),
-                      color: ui.Color(0xffD3C3D0),
-                      border: Border.all(color: ui.Color(0xff461A3E))),
-                  child: TextField(
-                      decoration: InputDecoration(
-                        hintText: 'Rechercher un lieu à visiter',
-                        hintStyle: TextStyle(
-                          fontFamily: 'Poppins',
-                          fontWeight: FontWeight.w500,
-                          fontSize: 13,
-                        ),
-                        border: InputBorder.none,
-                        suffixIcon: Icon(Icons.search),
-                        suffixIconColor: ui.Color(0xff461A3E),
+                    color: ui.Color(0xffD3C3D0),
+                    border: Border.all(color: ui.Color(0xff461A3E))),
+                child: TextField(
+                    decoration: InputDecoration(
+                      hintText: 'Rechercher un lieu à visiter',
+                      hintStyle: TextStyle(
+                        fontFamily: 'Poppins',
+                        fontWeight: FontWeight.w500,
+                        fontSize: 13,
                       ),
-                      controller: _textEditingController,
-                      onSubmitted: (value) {
-                        _onResearch(_textEditingController.text);
-                      }),
-                ),
-                Container(
-                  margin: EdgeInsets.only(left: 20),
-                  decoration: BoxDecoration(
-                    shape: BoxShape.circle,
-                    color: ui.Color(0xff461A3E),
-                  ),
-                  //alignment: Alignment.topLeft,
-                  child: IconButton(
-                    onPressed: _onFilterButtonPressed,
-                    icon: Icon(
-                      Icons.filter_alt_sharp,
-                      color: Colors.white,
+                      border: InputBorder.none,
+                      suffixIcon: Icon(Icons.search),
+                      suffixIconColor: ui.Color(0xff461A3E),
                     ),
+                    controller: _textEditingController,
+                    onSubmitted: (value) {
+                      _onResearch(_textEditingController.text);
+                    }),
+              ),
+              Container(
+                margin: EdgeInsets.only(left: 20),
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: ui.Color(0xff461A3E),
+                ),
+                //alignment: Alignment.topLeft,
+                child: IconButton(
+                  onPressed: _onFilterButtonPressed,
+                  icon: Icon(
+                    Icons.filter_alt_sharp,
+                    color: Colors.white,
                   ),
                 ),
-                iconFilterPressed
-                    ?  Container(
-                          height: 120,
-                          width: 150,
-                          margin: EdgeInsets.only(left: 50),
-                          decoration: BoxDecoration(
-                            borderRadius: BorderRadius.circular(18),
-                            color: ui.Color(0xff461A3E),
+              ),
+              iconFilterPressed
+                  ?  Container(
+                height: 120,
+                width: 150,
+                margin: EdgeInsets.only(left: 50),
+                decoration: BoxDecoration(
+                  borderRadius: BorderRadius.circular(18),
+                  color: ui.Color(0xff461A3E),
+                ),
+                child: ListView.builder(
+                  padding: EdgeInsets.zero,
+                  itemCount: 2,
+                  itemBuilder: (BuildContext context, int index) {
+                    return Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(18),
+                        color: ui.Color(0xff461A3E),
+                      ),
+                      child: ExpansionTile(
+                          collapsedShape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)
                           ),
-                          child: ListView.builder(
-                            padding: EdgeInsets.zero,
-                            itemCount: 2,
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(18),
-                                  color: ui.Color(0xff461A3E),
-                                ),
-                                child: ExpansionTile(
-                                  collapsedShape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18)
-                                  ),
-                                    shape: RoundedRectangleBorder(
-                                        borderRadius: BorderRadius.circular(18)
-                                    ),
-                                    backgroundColor: ui.Color(0xff461A3E),
-                                    collapsedBackgroundColor: ui.Color(0xff461A3E),
-                                    title: Text(Filtre[index]),
-                                    children: [
-                                      Container(
-                                        width: 120,
-                                        height: 60,
-                                        child: ListTile(
-                                          tileColor: ui.Color(0xff461A3E),
-                                          selectedTileColor: ui.Color(0xff461A3E),
-                                          title: index == 0
-                                              ? Text('Monument')
-                                              : Text('Nature'),
-                                          onTap: () => {
-                                            index == 0
-                                                ? _onFilterSelected(
-                                                    'Monument', index)
-                                                : _onFilterSelected(
-                                                    'Nature', index)
-                                          },
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 120,
-                                        height: 60,
-                                        child: ListTile(
-                                          tileColor: ui.Color(0xff461A3E),
-                                          selectedTileColor: ui.Color(0xff461A3E),
-                                          title: index == 0
-                                              ? Text('Musée')
-                                              : Text('Histoire'),
-                                          onTap: () => {
-                                            index == 0
-                                                ? _onFilterSelected(
-                                                    'Musée', index)
-                                                : _onFilterSelected(
-                                                    'Histoire', index)
-                                          },
-                                        ),
-                                      ),
-                                      Container(
-                                        width: 120,
-                                        height: 60,
-                                        child: ListTile(
-                                          tileColor: ui.Color(0xff461A3E),
-                                          selectedTileColor: ui.Color(0xff461A3E),
-                                          title: index == 0
-                                              ? Text('Parc')
-                                              : Text('Loisirs'),
-                                          onTap: () => {
-                                            index == 0
-                                                ? _onFilterSelected('Parc', index)
-                                                : _onFilterSelected(
-                                                    'Loisirs', index)
-                                          },
-                                        ),
-                                      ),
-                                    ]),
-                              );
-                            },
+                          shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(18)
                           ),
-                        )
-                    : Container(),
-              ],
-            ),
-          ]),
-        ),
+                          backgroundColor: ui.Color(0xff461A3E),
+                          collapsedBackgroundColor: ui.Color(0xff461A3E),
+                          title: Text(Filtre[index]),
+                          children: [
+                            Container(
+                              width: 120,
+                              height: 60,
+                              child: ListTile(
+                                tileColor: ui.Color(0xff461A3E),
+                                selectedTileColor: ui.Color(0xff461A3E),
+                                title: index == 0
+                                    ? Text('Monument')
+                                    : Text('Nature'),
+                                onTap: () => {
+                                  index == 0
+                                      ? _onFilterSelected(
+                                      'Monument', index)
+                                      : _onFilterSelected(
+                                      'Nature', index)
+                                },
+                              ),
+                            ),
+                            Container(
+                              width: 120,
+                              height: 60,
+                              child: ListTile(
+                                tileColor: ui.Color(0xff461A3E),
+                                selectedTileColor: ui.Color(0xff461A3E),
+                                title: index == 0
+                                    ? Text('Musée')
+                                    : Text('Histoire'),
+                                onTap: () => {
+                                  index == 0
+                                      ? _onFilterSelected(
+                                      'Musée', index)
+                                      : _onFilterSelected(
+                                      'Histoire', index)
+                                },
+                              ),
+                            ),
+                            Container(
+                              width: 120,
+                              height: 60,
+                              child: ListTile(
+                                tileColor: ui.Color(0xff461A3E),
+                                selectedTileColor: ui.Color(0xff461A3E),
+                                title: index == 0
+                                    ? Text('Parc')
+                                    : Text('Loisirs'),
+                                onTap: () => {
+                                  index == 0
+                                      ? _onFilterSelected('Parc', index)
+                                      : _onFilterSelected(
+                                      'Loisirs', index)
+                                },
+                              ),
+                            ),
+                          ]),
+                    );
+                  },
+                ),
+              )
+                  : Container(),
+            ],
+          ),
+        ]),
+      ),
     );
   }
 

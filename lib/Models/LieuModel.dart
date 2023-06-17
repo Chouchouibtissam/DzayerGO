@@ -27,20 +27,3 @@ class Lieu {
   }
 }
 
-/*List<Lieu> Lieux = [
-
-  Lieu(
-      ID_Lieu: '2',
-      Nom_Lieu: 'Notre dame',
-      Hor_Ouv: '09:00',
-      Prix_Acc: 'Gratuit',
-      Photo: 'assets/NotreDame.png'
-  ),
-  Lieu(
-      ID_Lieu: '3',
-      Nom_Lieu: 'Gazelle d''Or',
-      Hor_Ouv: '09:00',
-      Prix_Acc: 'Gratuit',
-      Photo: 'assets/Sahra.png'
-  )
-];*/

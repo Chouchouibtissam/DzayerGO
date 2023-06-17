@@ -1,20 +1,66 @@
 import 'package:dzayergo/Models/user.dart';
-import 'package:dzayergo/Pages/SignUp.dart';
 import 'package:dzayergo/Services/authentification_firebase_service.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
 
-
-// LOGIN SCREEN
-class Login extends StatefulWidget {
-  const Login({Key? key, this.onTap}) : super(key: key);
-  final Function() ? onTap;
+class Signup extends StatefulWidget {
+  const Signup({Key? key}) : super(key: key);
 
   @override
-  State<Login> createState() => _LoginState();
+  State<Signup> createState() => _SignupState();
 }
+Widget buildName(BuildContext context, TextEditingController _NameController) {
+  Size size = MediaQuery.of(context).size;
 
+  return Column(
+    crossAxisAlignment: CrossAxisAlignment.start,
+    children: <Widget>[
+      SizedBox(height: size.height * 0.02),
+      TextFormField(
+        autofocus: false,
+        controller: _NameController,
+        keyboardType: TextInputType.emailAddress,
+        validator: (value) {
+          if (value!.isEmpty) {
+            return "Veuillez saisir votre Nom";
+          }
+          // reg expression for email validation
+          if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
+            return "Veuillez entrer un Nom valide";
+          }
+          return null;
+        },
+        onSaved: (value) {
+          _NameController.text = value!;
+        },
+        style: const TextStyle(color: Colors.black87),
+        textInputAction: TextInputAction.next,
+        decoration: InputDecoration(
+          filled: true,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(15),
+            borderSide: const BorderSide(
+              color: Colors.white, // Change the outline color to white
+              width: 1, // Adjust the outline width as needed
+            ),
+          ),
+          fillColor: Colors.white, // Change the background color to white
+          contentPadding: EdgeInsets.only(top: 14),
+          prefixIcon: const Icon(
+            Icons.person,
+            color: Color(0xffc93a41),
+          ),
+          hintText: 'Name',
+          hintStyle: GoogleFonts.poppins(
+            color: Color(0x99461a3e),
+          ),
+        ),
+      ),
+    ],
+  );
+}
 Widget buildEmail(BuildContext context, TextEditingController _emailController) {
   Size size = MediaQuery.of(context).size;
 
@@ -32,7 +78,7 @@ Widget buildEmail(BuildContext context, TextEditingController _emailController) 
           }
           // reg expression for email validation
           if (!RegExp("^[a-zA-Z0-9+_.-]+@[a-zA-Z0-9.-]+.[a-z]").hasMatch(value)) {
-            return "Veuillez entrer une adresse e-mail valide.";
+            return "Veuillez entrer une adresse e-mail valide";
           }
           return null;
         },
@@ -65,7 +111,6 @@ Widget buildEmail(BuildContext context, TextEditingController _emailController) 
     ],
   );
 }
-
 Widget buildPassword(TextEditingController _passwordController) {
   return Column(
     crossAxisAlignment: CrossAxisAlignment.start,
@@ -78,10 +123,10 @@ Widget buildPassword(TextEditingController _passwordController) {
         validator: (value) {
           RegExp regex = RegExp(r'^.{6,}$');
           if (value!.isEmpty) {
-            return "Password is required for login";
+            return "Le mot de passe est requis pour la connexion";
           }
           if (!regex.hasMatch(value)) {
-            return "Enter Valid Password (Min. 6 Characters)";
+            return "Veuillez entrer un mot de passe valide (minimum 6 caractères)";
           }
           return null;
         },
@@ -114,36 +159,13 @@ Widget buildPassword(TextEditingController _passwordController) {
     ],
   );
 }
-
-Widget buildFrogotPass() {
-  return Align(
-    alignment: Alignment.centerRight,
-    child: GestureDetector(
-      onTap: () => print('Mot de passe oublié'),
-      child: RichText(
-        text: const TextSpan(
-          children: [
-            TextSpan(
-              text: 'Mot de passe oublié',
-              style: TextStyle(
-                fontSize: 15,
-                color: Color(0xefFF5243),
-                fontWeight: FontWeight.w500,
-              ),
-            ),
-          ],
-        ),
-      ),
-    ),
-  );
-}
-
-Widget buildLoginBtn(context,Future loginEmailPassword,GlobalKey<FormState> key) {
+Widget buildSignUpBtn(context,Future loginEmailPassword,GlobalKey<FormState> key) {
   Size size = MediaQuery.of(context).size;
 
   return Container(
     padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
     width: 250,
+    height: 60,
     child: ElevatedButton(
       onPressed: () {
         //test the app
@@ -153,38 +175,6 @@ Widget buildLoginBtn(context,Future loginEmailPassword,GlobalKey<FormState> key)
       },
       style: ElevatedButton.styleFrom(
         primary: Color(0xffFF5243), // Change the button color here
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20), // Change the border radius here
-        ),
-      ),
-      child: Text(
-        'Se connecter',
-        textAlign: TextAlign.center,
-        style: GoogleFonts.montserrat(
-          color: Colors.white,
-          fontSize: 17,
-          fontWeight: FontWeight.bold,
-        ),
-      ),
-    ),
-  );
-}
-
-Widget buildSignUp(BuildContext context) {
-  Size size = MediaQuery.of(context).size;
-
-  return Container(
-    padding: EdgeInsets.symmetric(vertical: size.height * 0.01),
-    width: 250,
-    child: ElevatedButton(
-      onPressed: () {
-        Navigator.push(
-          context,
-          MaterialPageRoute(builder: (context) => Signup()),
-        );
-      },
-      style: ElevatedButton.styleFrom(
-        primary: Color(0xffC93A41), // Change the button color here
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(20), // Change the border radius here
         ),
@@ -201,8 +191,6 @@ Widget buildSignUp(BuildContext context) {
     ),
   );
 }
-
-
 Widget insertLogo(context){
   Size size = MediaQuery.of(context).size;
   return Column(
@@ -221,42 +209,7 @@ Widget insertLogo(context){
   );
 }
 
-Widget _buildSignInWithText(context) {
-  Size size= MediaQuery.of(context).size;
-  return Padding(
-      padding: EdgeInsets.symmetric(vertical: size.height*0.01),
-      child:Row(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          const Text(
-            '--------------------',
-            style: TextStyle(
-              color: Colors.black54,
-              letterSpacing: -1,
-            ),
-          ),
-          Text(
-            'Vous avez pas un compte',
-            style: GoogleFonts.montserrat(
-              color: Colors.black54,
-              fontSize: 12,
-              fontWeight: FontWeight.bold,
-            ),
-          ),
-          const Text(
-            '---------------------',
-            style: TextStyle(
-              color: Colors.black54,
-              letterSpacing: -1,
-            ),
-          ),
-        ],
-      )
-  );
-}
-
-
-class _LoginState extends State<Login> {
+class _SignupState extends State<Signup> {
   // form key
   final _formKey = GlobalKey<FormState>();
 
@@ -264,6 +217,7 @@ class _LoginState extends State<Login> {
   String? errorMessage;
 
   //editing controller
+  final NameController = TextEditingController();
   final  emailController = TextEditingController();
   final  passwordController = TextEditingController();
 
@@ -279,20 +233,9 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     Size size = MediaQuery.of(context).size;
-
     return Scaffold(
       backgroundColor:  Colors.white,
       body: Container(
-        /*width: MediaQuery.of(context).size.width,
-        height: double.infinity,
-        decoration: const BoxDecoration(
-            image: DecorationImage(
-                fit: BoxFit.cover,
-                image: AssetImage(
-                    "img/tropical-background.png"
-                )
-            )
-        ),*/
         child: GestureDetector(
           child: Stack(
             children: <Widget>[
@@ -309,18 +252,14 @@ class _LoginState extends State<Login> {
                           SizedBox(height: size.height*0.065),
                           insertLogo(context),
                           SizedBox(height: size.height*0.06),
+                          buildName(context, NameController),
+
                           buildEmail(context,emailController),
                           SizedBox(height: size.height*0.01),
                           buildPassword(passwordController),
-                          buildFrogotPass(),
-                          buildLoginBtn(context,userModel.seConnecter(emailController.text, passwordController.text, context),_formKey),
+                          SizedBox(height: size.height*0.05),
+                          buildSignUpBtn(context,userModel.seConnecter(emailController.text, passwordController.text, context),_formKey),
                           SizedBox(height: size.height*0.01),
-                          _buildSignInWithText(context),
-                          //loginUI(),
-                          Padding(
-                            padding:EdgeInsets.only(bottom: size.height*0.0015,top:size.height*0.002),
-                            child: buildSignUp(context),
-                          ),
                         ],
                       ),
                     ),
@@ -331,6 +270,4 @@ class _LoginState extends State<Login> {
       ),
     );
   }
-
 }
-

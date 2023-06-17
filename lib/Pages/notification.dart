@@ -1,8 +1,9 @@
-
 import 'package:flutter/cupertino.dart';
 
 class Notifications extends StatefulWidget{
-  const Notifications({Key? key}): super(key:key);
+
+  Notifications({Key? key}): super(key:key);
+
   @override
   State<Notifications> createState()=> _Notifications();
 }
